@@ -3,6 +3,27 @@ use csv;
 use std::error::Error;
 use std::fs::File;
 use std::path::Path;
+use std::env;
+
+fn main() -> Result<(), Box<dyn Error>> {
+    // Get the command line arguments
+    let args: Vec<String> = env::args().collect();
+
+    // Check if the correct number of arguments is provided
+    if args.len() != 5 {
+        eprintln!("Usage: fastq_read -input fastqfile.fastq.gz -output csvfile.csv");
+        std::process::exit(1);
+    }
+
+    // Get the input and output file paths
+    let input_path = Path::new(&args[2]);
+    let output_path = Path::new(&args[4]);
+
+    // Call the extract_bases function with the file paths
+    extract_bases(input_path, output_path)?;
+
+    Ok(())
+}
 
 fn extract_bases(fastq_path: &Path, csv_path: &Path) -> Result<(), Box<dyn Error>> {
     // Open the FASTQ file
